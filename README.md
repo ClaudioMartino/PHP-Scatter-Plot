@@ -1,0 +1,44 @@
+# PHP Scatter Plot
+I was looking for a library to draw a very simple scatter plot in a webpage. [SVGGraph](https://github.com/goat1000/SVGGraph) was good, but I didn't want to include dozens of files in my project, so I decided to write it myself and to release it publicly. Maybe this is what you need, who knows.
+
+The PHP code generates an SVG image that represent the scatter plot of your data.
+
+## Guide
+Include [scatterplotlib.php](scatterplotlib.php) to your project
+```php
+include("scatterplotlib.php");
+```
+
+Write the scatter plot features in an associative array and construct one instance of the `ScatterPlot` class
+```php
+$my_plot = new ScatterPlot($overall_settings);
+```
+
+In the settings array you must define the following mandatory items:
+- the overall image size: `width` and `height`
+- the margins: `margin_l`, `margin_r`, `margin_t` and `margin_b`
+- the axis labels: `x_label` and `y_label`
+- the axis limits: `min_x`, `max_x`, `min_y` and `max_y`
+- the axis ticks steps: `x_step` and `y_step`
+
+You can also define the following facultative parameters:
+- the grid color: `grid_color`
+
+Add the X and Y values of your series, stored as arrays
+```php
+$my_plot->add_series($x_values, $y_values);
+```
+
+By default the marker will be a red circle 5 pixels wide. You can also customize the marker style
+```php
+$my_plot->add_series($x_values, $y_values, <size>, <color>, <opacity>, <type>);
+```
+Use `<type> = "o"` for the circle and `<type> = "s"` for the square.
+
+Finally draw the SVG image
+```php
+$my_plot->draw();
+```
+
+## Contributing
+Contributions are most welcome by forking the repository and sending a pull request.
