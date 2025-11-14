@@ -18,11 +18,11 @@ In the settings array you must define the following mandatory items:
 - the overall image size: `width` and `height`
 - the margins: `margin_l`, `margin_r`, `margin_t` and `margin_b`
 - the axis labels: `x_label` and `y_label`
-- the axis limits: `min_x`, `max_x`, `min_y` and `max_y`
 - the axis ticks steps: `x_step` and `y_step`
 
 You can also define the following facultative parameters:
-- the grid color: `grid_color`
+- the axis limits: `min_x`, `max_x`, `min_y` and `max_y`. The defaults limits are set in order to contain all the data of all the series with a margin equal to half the ticks step on both dimensions.
+- the grid color: `grid_color`. The default color is light gray (`#ccc`).
 
 Add the X and Y values of your series, stored as arrays
 ```php
@@ -31,9 +31,9 @@ $my_plot->add_series($x_values, $y_values);
 
 By default the marker will be a red circle 5 pixels wide. You can also customize the marker style
 ```php
-$my_plot->add_series($x_values, $y_values, <size>, <color>, <opacity>, <type>);
+$my_plot->add_series($x_values, $y_values, $size, $color, $opacity, $type);
 ```
-Use `<type> = "o"` for the circle and `<type> = "s"` for the square.
+Use `$type = "o"` for the circle and `$type = "s"` for the square.
 
 Finally draw the SVG image
 ```php

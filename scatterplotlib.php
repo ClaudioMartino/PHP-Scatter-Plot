@@ -33,10 +33,10 @@ class ScatterPlot {
     $this->y_label = $settings["y_label"];
     $this->x_step = $settings["x_step"];
     $this->y_step = $settings["y_step"];
-    $this->max_x = $settings["max_x"];
-    $this->max_y = $settings["max_y"];
-    $this->min_x = $settings["min_x"];
-    $this->min_y = $settings["min_y"];
+    $this->max_x = array_key_exists("max_x", $settings) ? $settings["max_x"] : NULL;
+    $this->max_y = array_key_exists("max_y", $settings) ? $settings["max_y"] : NULL;
+    $this->min_x = array_key_exists("min_x", $settings) ? $settings["min_x"] : NULL;
+    $this->min_y = array_key_exists("min_y", $settings) ? $settings["min_y"] : NULL;
     $this->grid_color = array_key_exists("grid_color", $settings) ? $settings["grid_color"] : "#ccc";
     $this->marker_size = array();
     $this->marker_color = array();
@@ -61,6 +61,8 @@ class ScatterPlot {
     #if(count($this->x_values) != count($this->y_values == 0))
     #  return -1;
 
+    $tot_series = count($this->x_values);
+
     $width = $this->width;
     $height = $this->height;
     $margin_l = $this->margin_l; 
@@ -69,7 +71,6 @@ class ScatterPlot {
     $margin_b = $this->margin_b; 
     $x_axis_len = $width - $margin_l - $margin_r;
     $y_axis_len = $height - $margin_t - $margin_b;
-    $tot_series = count($this->x_values);
   
     echo "<svg xmlns='http://www.w3.org/2000/svg' width='" . $width . "' height='" . $height . "'>\n\n";
     
@@ -109,6 +110,41 @@ class ScatterPlot {
   }
 
   public function draw_grid() {
+    # Set default min and max
+    $tot_series = count($this->x_values);
+    if($this->min_x === NULL) {
+      $min_x = min($this->x_values[0]);
+      for ($i=0; $i<$tot_series; $i++) {
+        if (min($this->x_values[$i]) < $min_x)
+          $min_x =min($this->x_values[$i]);
+      }
+      $this->min_x = $min_x - $this->x_step / 2;
+    }
+    if($this->max_x === NULL) {
+      $max_x = max($this->x_values[0]);
+      for ($i=0; $i<$tot_series; $i++) {
+        if (max($this->x_values[$i]) > $max_x)
+          $max_x =max($this->x_values[$i]);
+      }
+      $this->max_x = $max_x + $this->x_step / 2;
+    }
+    if($this->min_y === NULL) {
+      $min_y = min($this->y_values[0]);
+      for ($i=0; $i<$tot_series; $i++) {
+        if (min($this->y_values[$i]) < $min_y)
+          $min_y =min($this->y_values[$i]);
+      }
+      $this->min_y = $min_y - $this->y_step / 2;
+    }
+    if($this->max_y === NULL) {
+      $max_y = max($this->y_values[0]);
+      for ($i=0; $i<$tot_series; $i++) {
+        if (max($this->y_values[$i]) > $max_y)
+          $max_y =max($this->y_values[$i]);
+      }
+      $this->max_y = $max_y + $this->y_step / 2;
+    }
+
     $width = $this->width;
     $height = $this->height;
     $margin_l = $this->margin_l; 
