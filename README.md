@@ -14,14 +14,12 @@ Write the scatter plot features in an associative array and construct one instan
 $my_plot = new ScatterPlot($overall_settings);
 ```
 
-In the settings array you must define the following mandatory items:
-- the axis ticks steps: `'x_step'` and `'y_step'`
-
-You can also define the following facultative parameters:
+In the settings array you can define the following facultative parameters:
 - the overall image size: `'width'` and `'height'`. The default values are 800 and 400.
-- the title: `'title'`
-- the axis labels: `'x_label'` and `'y_label'`
+- the title: `'title'`.
+- the axis labels: `'x_label'` and `'y_label'`.
 - the axis limits: `'min_x'`, `'max_x'`, `'min_y'` and `'max_y'`. The default limits are set in order to contain all the data of all the series with a margin equal to 5 percent the data range.
+- the axis ticks steps: `'x_step'` and `'y_step'`. By default, the steps are set in order to have 6 ticks horizontally and 4 vertically.
 - the margins: `'margin_l'`, `'margin_r'`, `'margin_t'` and `'margin_b'`. The default values are 100, 25, 50 and 50 when there are labels, 100, 25, 25 and 25 when there aren't.
 - the grid color: `'grid_color'`. The default color is light gray (`#ccc`).
 - to add a legend to the plot use `'legend' => true`. By default, the legend is present if there is more than one series.

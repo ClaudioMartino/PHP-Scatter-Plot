@@ -34,8 +34,8 @@ class ScatterPlot {
     $this->margin_b = array_key_exists("margin_b", $settings) ? $settings["margin_b"] : NULL;
     $this->x_label = array_key_exists("x_label", $settings) ? $settings["x_label"] : NULL;
     $this->y_label = array_key_exists("y_label", $settings) ? $settings["y_label"] : NULL;
-    $this->x_step = $settings["x_step"];
-    $this->y_step = $settings["y_step"];
+    $this->x_step = array_key_exists("x_step", $settings) ? $settings["x_step"] : NULL;
+    $this->y_step = array_key_exists("y_step", $settings) ? $settings["y_step"] : NULL;
     $this->title = array_key_exists("title", $settings) ? $settings["title"] : NULL;
     $this->max_x = array_key_exists("max_x", $settings) ? $settings["max_x"] : NULL;
     $this->max_y = array_key_exists("max_y", $settings) ? $settings["max_y"] : NULL;
@@ -175,7 +175,18 @@ class ScatterPlot {
       if($this->max_y === NULL)
         $this->max_y = $max_y + $offset;
     }
+    $max_x = $this->max_x;
+    $min_x = $this->min_x;
+    $max_y = $this->max_y;
+    $min_y = $this->min_y;
 
+    # Set default steps
+    if(is_null($this->x_step))
+      $this->x_step = ($max_x - $min_x) / 5;
+    if(is_null($this->y_step))
+      $this->y_step = ($max_y - $min_y) / 3;
+    $x_step = $this->x_step;
+    $y_step = $this->y_step;
 
     $width = $this->width;
     $height = $this->height;
@@ -183,21 +194,19 @@ class ScatterPlot {
     $margin_r = $this->margin_r; 
     $margin_t = $this->margin_t; 
     $margin_b = $this->margin_b; 
+
     $x_axis_len = $width - $margin_l - $margin_r;
     $y_axis_len = $height - $margin_t - $margin_b;
 
     $grid_color = $this->grid_color;
 
     # Horizontal grid
-    $max_x = $this->max_x;
-    $min_x = $this->min_x;
-    $x_step = $this->x_step;
     $x_label = $this->x_label;
 
     $x_cnt = $min_x;
     while($x_cnt <= $max_x) {
       $x_val = $margin_l + ($x_cnt - $min_x) / ($max_x - $min_x) * $x_axis_len;
-      echo "<text x='" . $x_val . "' y='" . $height - $margin_b + 20 . "' text-anchor='middle'>" . $x_cnt . "</text>\n";
+      echo "<text x='" . $x_val . "' y='" . $height - $margin_b + 20 . "' text-anchor='middle'>" . round($x_cnt, 2). "</text>\n";
       echo "<line x1='" . $x_val . "' y1='" . $margin_t . "' x2='" . $x_val . "' y2='" . $height - $margin_b . "' stroke='" . $grid_color ."' />\n";
       $x_cnt += $x_step;
     }
@@ -205,15 +214,12 @@ class ScatterPlot {
       echo "<text x='" . $margin_l + $x_axis_len / 2 . "' y='" . $height - 10 . "' text-anchor='middle'>" . $x_label . "</text>\n\n";
     
     # Vertical grid
-    $max_y = $this->max_y;
-    $min_y = $this->min_y;
-    $y_step = $this->y_step;
     $y_label = $this->y_label;
 
     $y_cnt = $min_y;
     while($y_cnt <= $max_y) {
       $y_val = $y_axis_len + $margin_t - ($y_cnt - $min_y) / ($max_y - $min_y) * $y_axis_len;
-      echo "<text y='" . $y_val . "' x='" . $margin_l - 10 . "' text-anchor='end'>" . $y_cnt . "</text>\n";
+      echo "<text y='" . $y_val . "' x='" . $margin_l - 10 . "' text-anchor='end'>" . round($y_cnt, 2) . "</text>\n";
       echo "<line x1='" . $margin_l . "' y1='" . $y_val . "' x2='" . $width - $margin_r . "' y2='" . $y_val . "' stroke='" . $grid_color ."' />\n";
       $y_cnt += $y_step;
     }
