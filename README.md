@@ -15,10 +15,10 @@ $my_plot = new ScatterPlot($overall_settings);
 ```
 
 In the settings array you must define the following mandatory items:
-- the overall image size: `'width'` and `'height'`
 - the axis ticks steps: `'x_step'` and `'y_step'`
 
 You can also define the following facultative parameters:
+- the overall image size: `'width'` and `'height'`. The default values are 800 and 400.
 - the title: `'title'`
 - the axis labels: `'x_label'` and `'y_label'`
 - the axis limits: `'min_x'`, `'max_x'`, `'min_y'` and `'max_y'`. The default limits are set in order to contain all the data of all the series with a margin equal to half the ticks step on both dimensions.

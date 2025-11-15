@@ -26,8 +26,8 @@ class ScatterPlot {
   private $legend;
 
   public function __construct($settings) {
-    $this->width = $settings["width"];
-    $this->height = $settings["height"];
+    $this->width = array_key_exists("width", $settings) ? $settings["width"] : 800;
+    $this->height = array_key_exists("height", $settings) ? $settings["height"] : 400;
     $this->margin_l = array_key_exists("margin_l", $settings) ? $settings["margin_l"] : NULL;
     $this->margin_r = array_key_exists("margin_r", $settings) ? $settings["margin_r"] : 25;
     $this->margin_t = array_key_exists("margin_t", $settings) ? $settings["margin_t"] : NULL;
