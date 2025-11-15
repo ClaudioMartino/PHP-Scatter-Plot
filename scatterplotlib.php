@@ -114,11 +114,9 @@ class ScatterPlot {
       echo "<text x='" . $margin_l + $x_axis_len / 2 . "' y='20' text-anchor='middle'>" . $title . "</text>\n\n";
    
     # Draw series    
-    echo "<svg style='overflow: visible;' transform='translate(0, " . $height . ") scale(1, -1)' x='" . $margin_l . "' y='" . $margin_b . "' width='" . $x_axis_len . "' height='" . $y_axis_len . "'>\n";
     for ($i=0; $i<$tot_series; $i++) {
       $this->draw_series($i);
     }
-    echo "</svg>\n\n";
 
     # Add legend
     if($legend)
@@ -239,15 +237,13 @@ class ScatterPlot {
     #if(count($this->x_values[$i]) != count($this->y_values[$i] == 0))
     #  return -1;
 
+    $x_axis_len = $this->width - $this->margin_l - $this->margin_r;
+    $y_axis_len = $this->height - $this->margin_t - $this->margin_b;
     $x_values = $this->x_values[$cnt];
     $y_values = $this->y_values[$cnt];
-    $max_x = $this->max_x;
-    $max_y = $this->max_y;
-    $min_x = $this->min_x;
-    $min_y = $this->min_y;
 
     for($i=0; $i<count($x_values); $i++) {
-      echo "<use x='" . ($x_values[$i] - $min_x) / ($max_x - $min_x) * 100 . "%' y='" . ($y_values[$i] - $min_y) / ($max_y - $min_y) * 100 . "%' xlink:href='#marker_" . $cnt . "'></use>\n";
+      echo "<use x='" . $this->margin_l + ($x_values[$i] - $this->min_x) / ($this->max_x - $this->min_x) * $x_axis_len . "' y='" . $this->height - $this->margin_b - ($y_values[$i] - $this->min_y) / ($this->max_y - $this->min_y) * $y_axis_len . "' xlink:href='#marker_" . $cnt . "'></use>\n";
     }
   }
 
