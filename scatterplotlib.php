@@ -30,8 +30,8 @@ class ScatterPlot {
     $this->margin_r = $settings["margin_r"]; 
     $this->margin_t = $settings["margin_t"]; 
     $this->margin_b = $settings["margin_b"]; 
-    $this->x_label = $settings["x_label"];
-    $this->y_label = $settings["y_label"];
+    $this->x_label = array_key_exists("x_label", $settings) ? $settings["x_label"] : NULL;
+    $this->y_label = array_key_exists("y_label", $settings) ? $settings["y_label"] : NULL;
     $this->x_step = $settings["x_step"];
     $this->y_step = $settings["y_step"];
     $this->title = array_key_exists("title", $settings) ? $settings["title"] : NULL;
@@ -176,7 +176,8 @@ class ScatterPlot {
       echo "<line x1='" . $x_val . "' y1='" . $margin_t . "' x2='" . $x_val . "' y2='" . $height - $margin_b . "' stroke='" . $grid_color ."' />\n";
       $x_cnt += $x_step;
     }
-    echo "<text x='" . $margin_l + $x_axis_len / 2 . "' y='" . $height - $margin_b + 40  . "' text-anchor='middle'>" . $x_label . "</text>\n\n";
+    if(!is_null($x_label))
+      echo "<text x='" . $margin_l + $x_axis_len / 2 . "' y='" . $height  . "' text-anchor='middle'>" . $x_label . "</text>\n\n";
     
     # Vertical grid
     $max_y = $this->max_y;
@@ -191,7 +192,8 @@ class ScatterPlot {
       echo "<line x1='" . $margin_l . "' y1='" . $y_val . "' x2='" . $width - $margin_r . "' y2='" . $y_val . "' stroke='" . $grid_color ."' />\n";
       $y_cnt += $y_step;
     }
-    echo "<text y='" . $margin_t + $y_axis_len / 2 . "' x='0' text-anchor='start' >" . $y_label . "</text>\n\n";
+    if(!is_null($y_label))
+      echo "<text y='" . $margin_t + $y_axis_len / 2 . "' x='0' text-anchor='start' >" . $y_label . "</text>\n\n";
  
     # y axis
     echo "<line x1='" . $margin_l . "' y1='" . $margin_t . "' x2='" . $margin_l . "' y2='" . $height - $margin_b . "' stroke='#000' stroke-width='2px' />\n"; 
