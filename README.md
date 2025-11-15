@@ -22,7 +22,7 @@ You can also define the following facultative parameters:
 - the title: `title`
 - the axis labels: `x_label` and `y_label`
 - the axis limits: `min_x`, `max_x`, `min_y` and `max_y`. The default limits are set in order to contain all the data of all the series with a margin equal to half the ticks step on both dimensions.
-- the margins: `margin_l`, `margin_r`, `margin_t` and `margin_b`. The default values are 100, 25, 50 and 50.
+- the margins: `margin_l`, `margin_r`, `margin_t` and `margin_b`. The default values are 100, 25, 50 and 50 when there are labels, 100, 25, 25 and 25 when there aren't.
 - the grid color: `grid_color`. The default color is light gray (`#ccc`).
 
 Add the X and Y values of your series, stored as arrays

@@ -26,10 +26,10 @@ class ScatterPlot {
   public function __construct($settings) {
     $this->width = $settings["width"];
     $this->height = $settings["height"];
-    $this->margin_l = array_key_exists("margin_l", $settings) ? $settings["margin_l"] : 100; 
-    $this->margin_r = array_key_exists("margin_r", $settings) ? $settings["margin_r"] : 25; 
-    $this->margin_t = array_key_exists("margin_t", $settings) ? $settings["margin_t"] : 50; 
-    $this->margin_b = array_key_exists("margin_b", $settings) ? $settings["margin_b"] : 50; 
+    $this->margin_l = array_key_exists("margin_l", $settings) ? $settings["margin_l"] : NULL;
+    $this->margin_r = array_key_exists("margin_r", $settings) ? $settings["margin_r"] : 25;
+    $this->margin_t = array_key_exists("margin_t", $settings) ? $settings["margin_t"] : NULL;
+    $this->margin_b = array_key_exists("margin_b", $settings) ? $settings["margin_b"] : NULL;
     $this->x_label = array_key_exists("x_label", $settings) ? $settings["x_label"] : NULL;
     $this->y_label = array_key_exists("y_label", $settings) ? $settings["y_label"] : NULL;
     $this->x_step = $settings["x_step"];
@@ -40,12 +40,21 @@ class ScatterPlot {
     $this->min_x = array_key_exists("min_x", $settings) ? $settings["min_x"] : NULL;
     $this->min_y = array_key_exists("min_y", $settings) ? $settings["min_y"] : NULL;
     $this->grid_color = array_key_exists("grid_color", $settings) ? $settings["grid_color"] : "#ccc";
+
     $this->marker_size = array();
     $this->marker_color = array();
     $this->marker_opacity = array();
     $this->marker_type = array();
     $this->x_values = array();
     $this->y_values = array();
+
+    # Set default margins according to labels
+    if(is_null($this->margin_l))
+      $this->margin_l = is_null($this->y_label) ? 50 : 100;
+    if(is_null($this->margin_t))
+      $this->margin_t = is_null($this->title) ? 25 : 50;
+    if(is_null($this->margin_b))
+      $this->margin_b = is_null($this->x_label) ? 25 : 50;
   }
 
   public function add_series($x, $y, $marker_size = 5, $marker_color = "red", $marker_opacity = 1.0, $marker_type = 'o') {
