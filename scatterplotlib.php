@@ -72,19 +72,21 @@ class ScatterPlot {
   }
 
   public function draw() {
-    #if(count($this->x_values) == 0 or count($this->y_values == 0))
-    #  return -1;
-    #if(count($this->x_values) != count($this->y_values == 0))
-    #  return -1;
-
     $tot_series = count($this->x_values);
 
-    if(is_null($this->legend)) {
-      if($tot_series > 1)
-        $this->legend = true;
-      else
-        $this->legend = false;
+    # Check arrays
+    if($tot_series < 1)
+      throw new Exception("No series added!");
+    for ($i=0; $i<$tot_series; $i++) {
+      if(count($this->x_values[$i]) < 1)
+        throw new Exception("Series " . $i + 1 . " is empty!");
+      if(count($this->x_values[$i]) != count($this->y_values[$i]))
+        throw new Exception("In series " . $i + 1 . " X and Y don't match!");
     }
+
+    # Set default legend value
+    if(is_null($this->legend))
+      $this->legend = $tot_series > 1 ? true : false;
 
     $x_axis_len = $this->width - $this->margin_l - $this->margin_r;
     $y_axis_len = $this->height - $this->margin_t - $this->margin_b;
@@ -204,11 +206,6 @@ class ScatterPlot {
   }
 
   public function draw_series($cnt) {
-    #if(count($this->x_values[$i]) == 0 or count($this->y_values[$i] == 0))
-    #  return -1;
-    #if(count($this->x_values[$i]) != count($this->y_values[$i] == 0))
-    #  return -1;
-
     $x_axis_len = $this->width - $this->margin_l - $this->margin_r;
     $y_axis_len = $this->height - $this->margin_t - $this->margin_b;
     $x_values = $this->x_values[$cnt];
@@ -227,5 +224,4 @@ class ScatterPlot {
     }
   }
 }
-
 ?>
