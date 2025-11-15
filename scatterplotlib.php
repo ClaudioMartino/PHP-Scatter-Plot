@@ -79,25 +79,17 @@ class ScatterPlot {
 
     $tot_series = count($this->x_values);
 
-    $width = $this->width;
-    $height = $this->height;
-    $margin_l = $this->margin_l; 
-    $margin_r = $this->margin_r; 
-    $margin_t = $this->margin_t; 
-    $margin_b = $this->margin_b; 
     if(is_null($this->legend)) {
       if($tot_series > 1)
         $this->legend = true;
       else
         $this->legend = false;
     }
-    $legend = $this->legend;
-    $title = $this->title;
 
-    $x_axis_len = $width - $margin_l - $margin_r;
-    $y_axis_len = $height - $margin_t - $margin_b;
+    $x_axis_len = $this->width - $this->margin_l - $this->margin_r;
+    $y_axis_len = $this->height - $this->margin_t - $this->margin_b;
  
-    echo "<svg xmlns='http://www.w3.org/2000/svg' width='" . $width . "' height='" . $height . "'>\n\n";
+    echo "<svg xmlns='http://www.w3.org/2000/svg' width='" . $this->width . "' height='" . $this->height . "'>\n\n";
     
     # Define markers
     echo "<defs>\n";
@@ -110,8 +102,8 @@ class ScatterPlot {
     $this->draw_grid();
 
     # Add title
-    if(!is_null($title))
-      echo "<text x='" . $margin_l + $x_axis_len / 2 . "' y='20' text-anchor='middle'>" . $title . "</text>\n\n";
+    if(!is_null($this->title))
+      echo "<text x='" . $this->margin_l + $x_axis_len / 2 . "' y='20' text-anchor='middle'>" . $this->title . "</text>\n\n";
    
     # Draw series    
     for ($i=0; $i<$tot_series; $i++) {
@@ -119,10 +111,10 @@ class ScatterPlot {
     }
 
     # Add legend
-    if($legend)
+    if($this->legend)
       $this->add_legend();
 
-    echo "</svg>\n";
+    echo "\n</svg>\n";
   }
 
   public function define_marker($cnt) {
@@ -143,92 +135,72 @@ class ScatterPlot {
   public function draw_grid() {
     # Set default min and max (+/- 5%)
     $tot_series = count($this->x_values);
-    if($this->min_x === NULL or $this->max_x === NULL) {
+    if(is_null($this->min_x) or is_null($this->max_x)) {
       $min_x = min($this->x_values[0]);
       $max_x = max($this->x_values[0]);
-      for ($i=0; $i<$tot_series; $i++) {
+      for ($i=1; $i<$tot_series; $i++) {
         if (min($this->x_values[$i]) < $min_x)
-          $min_x =min($this->x_values[$i]);
+          $min_x = min($this->x_values[$i]);
         if (max($this->x_values[$i]) > $max_x)
-          $max_x =max($this->x_values[$i]);
+          $max_x = max($this->x_values[$i]);
       }
       $offset = 0.05 * ($max_x - $min_x);
-      if($this->min_x === NULL)
+      if(is_null($this->min_x))
         $this->min_x = $min_x - $offset;
-      if($this->max_x === NULL)
+      if(is_null($this->max_x))
         $this->max_x = $max_x + $offset;
     }
-    if($this->min_y === NULL or $this->max_y === NULL) {
+    if(is_null($this->min_y) or is_null($this->max_y)) {
       $min_y = min($this->y_values[0]);
       $max_y = max($this->y_values[0]);
-      for ($i=0; $i<$tot_series; $i++) {
+      for ($i=1; $i<$tot_series; $i++) {
         if (min($this->y_values[$i]) < $min_y)
-          $min_y =min($this->y_values[$i]);
+          $min_y = min($this->y_values[$i]);
         if (max($this->y_values[$i]) > $max_y)
-          $max_y =max($this->y_values[$i]);
+          $max_y = max($this->y_values[$i]);
       }
       $offset = 0.05 * ($max_y - $min_y);
-      if($this->min_y === NULL)
+      if(is_null($this->min_y))
         $this->min_y = $min_y - $offset;
-      if($this->max_y === NULL)
+      if(is_null($this->max_y))
         $this->max_y = $max_y + $offset;
     }
-    $max_x = $this->max_x;
-    $min_x = $this->min_x;
-    $max_y = $this->max_y;
-    $min_y = $this->min_y;
 
     # Set default steps
     if(is_null($this->x_step))
-      $this->x_step = ($max_x - $min_x) / 5;
+      $this->x_step = ($this->max_x - $this->min_x) / 5;
     if(is_null($this->y_step))
-      $this->y_step = ($max_y - $min_y) / 3;
-    $x_step = $this->x_step;
-    $y_step = $this->y_step;
-
-    $width = $this->width;
-    $height = $this->height;
-    $margin_l = $this->margin_l; 
-    $margin_r = $this->margin_r; 
-    $margin_t = $this->margin_t; 
-    $margin_b = $this->margin_b; 
-
-    $x_axis_len = $width - $margin_l - $margin_r;
-    $y_axis_len = $height - $margin_t - $margin_b;
-
-    $grid_color = $this->grid_color;
+      $this->y_step = ($this->max_y - $this->min_y) / 3;
 
     # Horizontal grid
-    $x_label = $this->x_label;
-
-    $x_cnt = $min_x;
-    while($x_cnt <= $max_x) {
-      $x_val = $margin_l + ($x_cnt - $min_x) / ($max_x - $min_x) * $x_axis_len;
-      echo "<text x='" . $x_val . "' y='" . $height - $margin_b + 20 . "' text-anchor='middle'>" . round($x_cnt, 2). "</text>\n";
-      echo "<line x1='" . $x_val . "' y1='" . $margin_t . "' x2='" . $x_val . "' y2='" . $height - $margin_b . "' stroke='" . $grid_color ."' />\n";
-      $x_cnt += $x_step;
+    $x_axis_len = $this->width - $this->margin_l - $this->margin_r;
+    $x_cnt = $this->min_x;
+    while($x_cnt <= $this->max_x) {
+      $x_val = $this->margin_l + ($x_cnt - $this->min_x) / ($this->max_x - $this->min_x) * $x_axis_len;
+      echo "<text x='" . $x_val . "' y='" . $this->height - $this->margin_b + 20 . "' text-anchor='middle'>" . round($x_cnt, 2). "</text>\n";
+      echo "<line x1='" . $x_val . "' y1='" . $this->margin_t . "' x2='" . $x_val . "' y2='" . $this->height - $this->margin_b . "' stroke='" . $this->grid_color ."' />\n";
+      $x_cnt += $this->x_step;
     }
-    if(!is_null($x_label))
-      echo "<text x='" . $margin_l + $x_axis_len / 2 . "' y='" . $height - 10 . "' text-anchor='middle'>" . $x_label . "</text>\n\n";
+    if(!is_null($this->x_label))
+      echo "<text x='" . $this->margin_l + $x_axis_len / 2 . "' y='" . $this->height - 10 . "' text-anchor='middle'>" . $this->x_label . "</text>\n\n";
     
     # Vertical grid
-    $y_label = $this->y_label;
-
-    $y_cnt = $min_y;
-    while($y_cnt <= $max_y) {
-      $y_val = $y_axis_len + $margin_t - ($y_cnt - $min_y) / ($max_y - $min_y) * $y_axis_len;
-      echo "<text y='" . $y_val . "' x='" . $margin_l - 10 . "' text-anchor='end'>" . round($y_cnt, 2) . "</text>\n";
-      echo "<line x1='" . $margin_l . "' y1='" . $y_val . "' x2='" . $width - $margin_r . "' y2='" . $y_val . "' stroke='" . $grid_color ."' />\n";
-      $y_cnt += $y_step;
+    $y_axis_len = $this->height - $this->margin_t - $this->margin_b;
+    $y_cnt = $this->min_y;
+    while($y_cnt <= $this->max_y) {
+      $y_val = $y_axis_len + $this->margin_t - ($y_cnt - $this->min_y) / ($this->max_y - $this->min_y) * $y_axis_len;
+      echo "<text y='" . $y_val . "' x='" . $this->margin_l - 10 . "' text-anchor='end'>" . round($y_cnt, 2) . "</text>\n";
+      echo "<line x1='" . $this->margin_l . "' y1='" . $y_val . "' x2='" . $this->width - $this->margin_r . "' y2='" . $y_val . "' stroke='" . $this->grid_color ."' />\n";
+      $y_cnt += $this->y_step;
     }
-    if(!is_null($y_label))
-      echo "<text y='" . $margin_t + $y_axis_len / 2 . "' x='0' text-anchor='start' >" . $y_label . "</text>\n\n";
+    if(!is_null($this->y_label))
+      echo "<text y='" . $this->margin_t + $y_axis_len / 2 . "' x='0' text-anchor='start' >" . $this->y_label . "</text>\n\n";
  
-    # y axis
-    echo "<line x1='" . $margin_l . "' y1='" . $margin_t . "' x2='" . $margin_l . "' y2='" . $height - $margin_b . "' stroke='#000' stroke-width='2px' />\n"; 
-    
-    # x axis
-    echo "<line x1='" . $margin_l - 1 . "' y1='" . $height - $margin_b . "' x2='" . $width - $margin_r . "' y2='" . $height - $margin_b . "' stroke='#000' stroke-width='2px' />\n\n";
+    # Horizontal axis
+    echo "<line x1='" . $this->margin_l - 1 . "' y1='" . $this->height - $this->margin_b . "' x2='" . $this->width - $this->margin_r . "' y2='" . $this->height - $this->margin_b . "' stroke='#000' stroke-width='2px' />\n\n";
+
+    # Vertical axis
+    echo "<line x1='" . $this->margin_l . "' y1='" . $this->margin_t . "' x2='" . $this->margin_l . "' y2='" . $this->height - $this->margin_b . "' stroke='#000' stroke-width='2px' />\n"; 
   }
 
   public function draw_series($cnt) {
