@@ -26,10 +26,10 @@ class ScatterPlot {
   public function __construct($settings) {
     $this->width = $settings["width"];
     $this->height = $settings["height"];
-    $this->margin_l = $settings["margin_l"]; 
-    $this->margin_r = $settings["margin_r"]; 
-    $this->margin_t = $settings["margin_t"]; 
-    $this->margin_b = $settings["margin_b"]; 
+    $this->margin_l = array_key_exists("margin_l", $settings) ? $settings["margin_l"] : 100; 
+    $this->margin_r = array_key_exists("margin_r", $settings) ? $settings["margin_r"] : 25; 
+    $this->margin_t = array_key_exists("margin_t", $settings) ? $settings["margin_t"] : 50; 
+    $this->margin_b = array_key_exists("margin_b", $settings) ? $settings["margin_b"] : 50; 
     $this->x_label = array_key_exists("x_label", $settings) ? $settings["x_label"] : NULL;
     $this->y_label = array_key_exists("y_label", $settings) ? $settings["y_label"] : NULL;
     $this->x_step = $settings["x_step"];
