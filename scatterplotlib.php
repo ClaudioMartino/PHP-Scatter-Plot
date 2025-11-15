@@ -143,40 +143,39 @@ class ScatterPlot {
   }
 
   public function draw_grid() {
-    # Set default min and max
+    # Set default min and max (+/- 5%)
     $tot_series = count($this->x_values);
-    if($this->min_x === NULL) {
+    if($this->min_x === NULL or $this->max_x === NULL) {
       $min_x = min($this->x_values[0]);
+      $max_x = max($this->x_values[0]);
       for ($i=0; $i<$tot_series; $i++) {
         if (min($this->x_values[$i]) < $min_x)
           $min_x =min($this->x_values[$i]);
-      }
-      $this->min_x = $min_x - $this->x_step / 2;
-    }
-    if($this->max_x === NULL) {
-      $max_x = max($this->x_values[0]);
-      for ($i=0; $i<$tot_series; $i++) {
         if (max($this->x_values[$i]) > $max_x)
           $max_x =max($this->x_values[$i]);
       }
-      $this->max_x = $max_x + $this->x_step / 2;
+      $offset = 0.05 * ($max_x - $min_x);
+      if($this->min_x === NULL)
+        $this->min_x = $min_x - $offset;
+      if($this->max_x === NULL)
+        $this->max_x = $max_x + $offset;
     }
-    if($this->min_y === NULL) {
+    if($this->min_y === NULL or $this->max_y === NULL) {
       $min_y = min($this->y_values[0]);
+      $max_y = max($this->y_values[0]);
       for ($i=0; $i<$tot_series; $i++) {
         if (min($this->y_values[$i]) < $min_y)
           $min_y =min($this->y_values[$i]);
-      }
-      $this->min_y = $min_y - $this->y_step / 2;
-    }
-    if($this->max_y === NULL) {
-      $max_y = max($this->y_values[0]);
-      for ($i=0; $i<$tot_series; $i++) {
         if (max($this->y_values[$i]) > $max_y)
           $max_y =max($this->y_values[$i]);
       }
-      $this->max_y = $max_y + $this->y_step / 2;
+      $offset = 0.05 * ($max_y - $min_y);
+      if($this->min_y === NULL)
+        $this->min_y = $min_y - $offset;
+      if($this->max_y === NULL)
+        $this->max_y = $max_y + $offset;
     }
+
 
     $width = $this->width;
     $height = $this->height;
@@ -203,7 +202,7 @@ class ScatterPlot {
       $x_cnt += $x_step;
     }
     if(!is_null($x_label))
-      echo "<text x='" . $margin_l + $x_axis_len / 2 . "' y='" . $height  . "' text-anchor='middle'>" . $x_label . "</text>\n\n";
+      echo "<text x='" . $margin_l + $x_axis_len / 2 . "' y='" . $height - 10 . "' text-anchor='middle'>" . $x_label . "</text>\n\n";
     
     # Vertical grid
     $max_y = $this->max_y;
