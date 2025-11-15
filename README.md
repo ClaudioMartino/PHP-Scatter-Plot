@@ -21,6 +21,7 @@ In the settings array you must define the following mandatory items:
 - the axis ticks steps: `x_step` and `y_step`
 
 You can also define the following facultative parameters:
+- the title: `title`
 - the axis limits: `min_x`, `max_x`, `min_y` and `max_y`. The defaults limits are set in order to contain all the data of all the series with a margin equal to half the ticks step on both dimensions.
 - the grid color: `grid_color`. The default color is light gray (`#ccc`).
 

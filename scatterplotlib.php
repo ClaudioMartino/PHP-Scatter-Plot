@@ -10,6 +10,7 @@ class ScatterPlot {
   private $y_label;
   private $x_step;
   private $y_step;
+  private $title;
   private $max_x;
   private $max_y;
   private $min_x;
@@ -33,6 +34,7 @@ class ScatterPlot {
     $this->y_label = $settings["y_label"];
     $this->x_step = $settings["x_step"];
     $this->y_step = $settings["y_step"];
+    $this->title = array_key_exists("title", $settings) ? $settings["title"] : NULL;
     $this->max_x = array_key_exists("max_x", $settings) ? $settings["max_x"] : NULL;
     $this->max_y = array_key_exists("max_y", $settings) ? $settings["max_y"] : NULL;
     $this->min_x = array_key_exists("min_x", $settings) ? $settings["min_x"] : NULL;
@@ -69,6 +71,7 @@ class ScatterPlot {
     $margin_r = $this->margin_r; 
     $margin_t = $this->margin_t; 
     $margin_b = $this->margin_b; 
+    $title = $this->title;
     $x_axis_len = $width - $margin_l - $margin_r;
     $y_axis_len = $height - $margin_t - $margin_b;
   
@@ -83,6 +86,10 @@ class ScatterPlot {
 
     # Draw grid
     $this->draw_grid();
+
+    # Add title
+    if(!is_null($title))
+      echo "<text x='" . $margin_l + $x_axis_len / 2 . "' y='20' text-anchor='middle'>" . $title . "</text>\n\n";
    
     # Draw series    
     echo "<svg style='overflow: visible;' transform='translate(0, " . $height . ") scale(1, -1)' x='" . $margin_l . "' y='" . $margin_b . "' width='" . $x_axis_len . "' height='" . $y_axis_len . "'>\n";
@@ -187,10 +194,10 @@ class ScatterPlot {
     echo "<text y='" . $margin_t + $y_axis_len / 2 . "' x='0' text-anchor='start' >" . $y_label . "</text>\n\n";
  
     # y axis
-    echo "<line x1='" . $margin_l . "' y1='0' x2='" . $margin_l . "' y2='" . $height - $margin_b . "' stroke='#000' stroke-width='2px' />\n"; 
+    echo "<line x1='" . $margin_l . "' y1='" . $margin_t . "' x2='" . $margin_l . "' y2='" . $height - $margin_b . "' stroke='#000' stroke-width='2px' />\n"; 
     
     # x axis
-    echo "<line x1='" . $margin_l - 1 . "' y1='" . $height - $margin_b . "' x2='" . $width . "' y2='" . $height - $margin_b . "' stroke='#000' stroke-width='2px' />\n\n";
+    echo "<line x1='" . $margin_l - 1 . "' y1='" . $height - $margin_b . "' x2='" . $width - $margin_r . "' y2='" . $height - $margin_b . "' stroke='#000' stroke-width='2px' />\n\n";
   }
 
   public function draw_series($cnt) {
