@@ -8,10 +8,14 @@ Include [scatterplotlib.php](scatterplotlib.php) to your project
 ```php
 include("scatterplotlib.php");
 ```
-
-Write the scatter plot features in an associative array and construct one instance of the `ScatterPlot` class
+Construct one instance of the `ScatterPlot` class
 ```php
-$my_plot = new ScatterPlot($overall_settings);
+$my_plot = new ScatterPlot();
+```
+
+You can define the plot features in an associative array and use it when constructing the class
+```php
+$my_plot = new ScatterPlot($settings);
 ```
 
 In the settings array you can define the following facultative parameters:
