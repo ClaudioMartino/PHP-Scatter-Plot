@@ -22,6 +22,8 @@ class ScatterPlot {
   private $marker_type;
   private $x_values;
   private $y_values;
+  private $series_name;
+  private $legend;
 
   public function __construct($settings) {
     $this->width = $settings["width"];
@@ -40,6 +42,7 @@ class ScatterPlot {
     $this->min_x = array_key_exists("min_x", $settings) ? $settings["min_x"] : NULL;
     $this->min_y = array_key_exists("min_y", $settings) ? $settings["min_y"] : NULL;
     $this->grid_color = array_key_exists("grid_color", $settings) ? $settings["grid_color"] : "#ccc";
+    $this->legend = array_key_exists("legend", $settings) ? $settings["legend"] : NULL;
 
     $this->marker_size = array();
     $this->marker_color = array();
@@ -47,6 +50,7 @@ class ScatterPlot {
     $this->marker_type = array();
     $this->x_values = array();
     $this->y_values = array();
+    $this->series_name = array();
 
     # Set default margins according to labels
     if(is_null($this->margin_l))
@@ -57,9 +61,10 @@ class ScatterPlot {
       $this->margin_b = is_null($this->x_label) ? 25 : 50;
   }
 
-  public function add_series($x, $y, $marker_size = 5, $marker_color = "red", $marker_opacity = 1.0, $marker_type = 'o') {
+  public function add_series($x, $y, $series_name = "?", $marker_size = 5, $marker_color = "red", $marker_opacity = 1.0, $marker_type = 'o') {
     $this->x_values[] = $x;
     $this->y_values[] = $y;
+    $this->series_name[] = $series_name;
     $this->marker_size[] = $marker_size;
     $this->marker_color[] = $marker_color;
     $this->marker_opacity[] = $marker_opacity;
@@ -80,10 +85,18 @@ class ScatterPlot {
     $margin_r = $this->margin_r; 
     $margin_t = $this->margin_t; 
     $margin_b = $this->margin_b; 
+    if(is_null($this->legend)) {
+      if($tot_series > 1)
+        $this->legend = true;
+      else
+        $this->legend = false;
+    }
+    $legend = $this->legend;
     $title = $this->title;
+
     $x_axis_len = $width - $margin_l - $margin_r;
     $y_axis_len = $height - $margin_t - $margin_b;
-  
+ 
     echo "<svg xmlns='http://www.w3.org/2000/svg' width='" . $width . "' height='" . $height . "'>\n\n";
     
     # Define markers
@@ -106,6 +119,10 @@ class ScatterPlot {
       $this->draw_series($i);
     }
     echo "</svg>\n\n";
+
+    # Add legend
+    if($legend)
+      $this->add_legend();
 
     echo "</svg>\n";
   }
@@ -226,6 +243,14 @@ class ScatterPlot {
 
     for($i=0; $i<count($x_values); $i++) {
       echo "<use x='" . ($x_values[$i] - $min_x) / ($max_x - $min_x) * 100 . "%' y='" . ($y_values[$i] - $min_y) / ($max_y - $min_y) * 100 . "%' xlink:href='#marker_" . $cnt . "'></use>\n";
+    }
+  }
+
+  public function add_legend() {
+    $tot_series = count($this->x_values);
+    for($i=0; $i<$tot_series; $i++) {
+      echo "<text x='" . $this->margin_l + 20 + 10 . "' y='" . $this->height - $this->margin_b + 5 - 20 * $tot_series + 20 * $i . "'>" . $this->series_name[$i] . "</text>\n";
+      echo "<use x='" . $this->margin_l + 20 . "' y='" . $this->height - $this->margin_b - 20 * $tot_series + 20 * $i . "' xlink:href='#marker_" . $i . "'></use>\n";
     }
   }
 }
