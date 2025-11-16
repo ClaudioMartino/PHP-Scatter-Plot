@@ -7,15 +7,28 @@ I was looking for a library to draw a very simple scatter plot in a webpage. [SV
 The PHP code generates an SVG image that represents the scatter plot of your data.
 
 ## Guide
+### Basic usage
 Include [scatterplotlib.php](scatterplotlib.php) to your project
 ```php
 include("scatterplotlib.php");
 ```
+
 Construct one instance of the `ScatterPlot` class
 ```php
 $my_plot = new ScatterPlot();
 ```
 
+Add the X and Y values of your series, stored as arrays
+```php
+$my_plot->add_series($x_values, $y_values);
+```
+
+Finally draw the SVG image
+```php
+$my_plot->draw();
+```
+
+### Advanced usage
 You can define the plot features in an associative array and use it when constructing the class
 ```php
 $my_plot = new ScatterPlot($settings);
@@ -27,30 +40,15 @@ In the settings array you can define the following facultative parameters:
 - the axis labels: `'x_label'` and `'y_label'`.
 - the axis limits: `'min_x'`, `'max_x'`, `'min_y'` and `'max_y'`. The default limits are set in order to contain all the data of all the series with a margin equal to 5 percent the data range.
 - the axis ticks steps: `'x_step'` and `'y_step'`. By default, the steps are set in order to have 6 ticks horizontally and 4 vertically.
-- the margins: `'margin_l'`, `'margin_r'`, `'margin_t'` and `'margin_b'`. The default values are 100, 25, 50 and 50 when there are labels, 100, 25, 25 and 25 when there aren't.
+- the margins: `'margin_l'`, `'margin_r'`, `'margin_t'` and `'margin_b'`. The default values are 100, 25, 50 and 50 when there are labels, 50, 25, 25 and 25 when there aren't.
 - the grid color: `'grid_color'`. The default color is light gray (`#ccc`).
 - to add a legend to the plot use `'legend' => true`. By default, the legend is present if there is more than one series.
 
-Add the X and Y values of your series, stored as arrays
-```php
-$my_plot->add_series($x_values, $y_values);
-```
-
-You can add the name of the series to be used in the legend
-```php
-$my_plot->add_series($x_values, $y_values, $series_name);
-```
-
-By default the marker will be a red circle 5 pixels wide. You can also customize the marker style
+You can add the name of the series to be used in the legend and customize the marker
 ```php
 $my_plot->add_series($x_values, $y_values, $series_name, $size, $color, $opacity, $type);
 ```
-Use `$type = "o"` for the circle and `$type = "s"` for the square.
-
-Finally draw the SVG image
-```php
-$my_plot->draw();
-```
+Use `$type = "o"` for the circle and `$type = "s"` for the square. By default the marker will be a red circle 5 pixels wide. 
 
 ## Contributing
 Contributions are most welcome by forking the repository and sending a pull request.
