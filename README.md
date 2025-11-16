@@ -1,7 +1,10 @@
 # PHP Scatter Plot
+
+![An example.](img.png)
+
 I was looking for a library to draw a very simple scatter plot in a webpage. [SVGGraph](https://github.com/goat1000/SVGGraph) was good, but I didn't want to include dozens of files in my project, so I decided to write it myself and to release it publicly. Maybe this is what you need, who knows.
 
-The PHP code generates an SVG image that represent the scatter plot of your data.
+The PHP code generates an SVG image that represents the scatter plot of your data.
 
 ## Guide
 Include [scatterplotlib.php](scatterplotlib.php) to your project
